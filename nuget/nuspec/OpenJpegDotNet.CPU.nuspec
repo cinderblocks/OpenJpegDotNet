@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0"?>
 <package>
   <metadata>
-    <id>OpenJpegDotNet</id>
-    <version>2.4.0.20210417</version>
-    <title>OpenJpegDotNet</title>
-    <authors>Takuya Takeuchi</authors>
-    <owners>Takuya Takeuchi</owners>
+    <id>OpenJpegDotNet-LMV</id>
+    <version>2.4.0.20210709</version>
+    <title>OpenJpegDotNet-LMV</title>
+    <authors>Sjofn LLC</authors>
+    <owners>Sjofn LLC</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="file">LICENSE.txt</license>
-    <projectUrl>https://github.com/takuya-takeuchi/OpenJpegDotNet</projectUrl>
+    <projectUrl>https://github.com/cinderblocks/OpenJpegDotNet</projectUrl>
     <icon>images\jpeg128.png</icon>
-    <description>openjpeg wrapper library written in C++ and C# for Windows, MacOS and Linux</description>
+    <description>Fork of Takuya Takeuchi's OpenJpegDotNet for use in LibreMetaverse</description>
     <releaseNotes></releaseNotes>
     <copyright>© Takuya Takeuchi 2021</copyright>
     <tags>openjpeg .net jpeg2000</tags>
