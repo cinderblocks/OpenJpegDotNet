@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace OpenJpegDotNet
 {
@@ -42,7 +43,7 @@ namespace OpenJpegDotNet
         /// Gets the pixel data of this <see cref="RawImage"/>.
         /// </summary>
         /// <returns>The pixel data.</returns>
-        public IReadOnlyCollection<byte> Data
+        public ReadOnlyCollection<byte> Data
         {
             get;
         }
@@ -72,6 +73,14 @@ namespace OpenJpegDotNet
         public ImgType Type
         {
             get;
+        }
+
+        public byte[] Bytes
+        {
+            get
+            {
+                return Data.ToArray();
+            }
         }
 
         #endregion
