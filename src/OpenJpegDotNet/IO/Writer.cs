@@ -24,8 +24,6 @@ namespace OpenJpegDotNet.IO
 
         private Codec _Codec;
 
-        private CompressionParameters _CompressionParameters;
-
         private OpenJpegDotNet.Image _Image;
 
         private readonly Stream _Stream;
@@ -215,7 +213,6 @@ namespace OpenJpegDotNet.IO
             if (disposing)
             {
                 this._Codec?.Dispose();
-                this._CompressionParameters?.Dispose();
                 this._Stream.Dispose();
 
                 Marshal.FreeHGlobal(this._Buffer.Data);
