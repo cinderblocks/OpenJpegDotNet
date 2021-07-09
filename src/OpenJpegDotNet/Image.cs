@@ -20,6 +20,24 @@ namespace OpenJpegDotNet
             this.NativePtr = ptr;
         }
 
+        internal Image(RawImage rawImage)
+        {
+            switch (rawImage.Type)
+            {
+                case RawImage.ImgType.Targa:
+                    using (CompressionParameters cp = new CompressionParameters())
+                    {
+                        NativeMethods.openjpeg_openjp2_opj_set_default_encoder_parameters(cp.NativePtr);
+                        NativeMethods.openjpeg_openjp2_extensions_tgatoimage(rawImage.NativePtr,
+                                                                             this.NativePtr,
+                                                                             cp.NativePtr);
+                    }
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -192,7 +210,6 @@ namespace OpenJpegDotNet
             this.ThrowIfDisposed();
 
             var ret = NativeMethods.openjpeg_openjp2_extensions_imagetobmp(this.NativePtr,
-                                                                           false,
                                                                            out var planes,
                                                                            out var width,
                                                                            out var height,
@@ -299,16 +316,15 @@ namespace OpenJpegDotNet
         }
 
         /// <summary>
-        /// Converts this <see cref="Image"/> to a <see cref="RawBitmap"/>.
+        /// Converts this <see cref="Image"/> to a Bitmap <see cref="RawImage"/>.
         /// </summary>
-        /// <returns>A <see cref="RawBitmap"/> that represents the converted <see cref="Image"/>.</returns>
+        /// <returns>A <see cref="RawImage"/> that represents the converted <see cref="Image"/>.</returns>
         /// <exception cref="NotSupportedException">This object is not supported.</exception>
-        public RawBitmap ToRawBitmap()
+        public RawImage ToRawBitmap()
         {
             this.ThrowIfDisposed();
 
             var ret = NativeMethods.openjpeg_openjp2_extensions_imagetobmp(this.NativePtr,
-                                                                           false,
                                                                            out var planes,
                                                                            out var width,
                                                                            out var height,
@@ -395,7 +411,47 @@ namespace OpenJpegDotNet
                     NativeMethods.stdlib_free(planes);
             }
 
-            return new RawBitmap(raw, (int) width, (int) height, (int) channel);
+            return new RawImage(raw, (int) width, (int) height, (int) channel, RawImage.ImgType.Bitmap);
+        }
+
+        /// <summary>
+        /// Converts this <see cref="Image"/> to a TARGA <see cref="RawImage"/>.
+        /// </summary>
+        /// <returns>A <see cref="RawImage"/> that represents the converted <see cref="Image"/>.</returns>
+        /// <exception cref="NotSupportedException">This object is not supported.</exception>
+        public RawImage ToTarga()
+        {
+            this.ThrowIfDisposed();
+
+            var ret = NativeMethods.openjpeg_openjp2_extensions_imagetotga(this.NativePtr,
+                                                                           out var tga,
+                                                                           out var tga_size,
+                                                                           out var width,
+                                                                           out var height,
+                                                                           out var channel);
+            if (ret != NativeMethods.ErrorType.OK)
+            {
+                if (tga != IntPtr.Zero) { NativeMethods.stdlib_free(tga); }
+
+                throw new NotSupportedException("This object is not supported.");
+            }
+
+            var raw = new byte[tga_size];
+            try
+            {
+                unsafe
+                {
+                    fixed (byte* dst = &raw[0])
+                    {
+                        NativeMethods.cstd_memcpy((IntPtr)dst, tga, (int)tga_size);
+                    }
+                }
+            }
+            finally
+            {
+                if (tga != IntPtr.Zero) { NativeMethods.stdlib_free(tga); }
+            }
+            return new RawImage(raw, (int)width, (int)height, (int)channel, RawImage.ImgType.Targa);
         }
 
         #endregion

@@ -19,12 +19,24 @@ namespace OpenJpegDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType openjpeg_openjp2_extensions_imagetobmp(IntPtr image,
-                                                                              bool big_endian,
                                                                               out IntPtr planes,
                                                                               out uint out_w,
                                                                               out uint out_h,
                                                                               out uint out_c,
                                                                               out uint out_p);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType openjpeg_openjp2_extensions_imagetotga(IntPtr image,
+                                                                              out IntPtr tga,
+                                                                              out uint tga_size,
+                                                                              out uint out_w,
+                                                                              out uint out_h,
+                                                                              out uint out_c);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType openjpeg_openjp2_extensions_tgatoimage(IntPtr tga,
+                                                                              IntPtr image,
+                                                                              IntPtr cparams);
 
         #endregion
 

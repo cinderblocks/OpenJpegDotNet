@@ -476,7 +476,7 @@ namespace OpenJpegDotNet.Tests
                 var result = reader.ReadHeader();
                 Assert.True(result, $"Failed to invoke {typeof(Reader).FullName}.{nameof(IO.Reader.ReadHeader)} for {target.Format} and {target.IsReadStream}");
 
-                using (var bitmap = reader.ReadData())
+                using (var bitmap = reader.DecodeToBitmap())
                 {
                     var bitmapPath = Path.ChangeExtension(path, "bmp");
                     var directory = Path.Combine(ResultDirectory, nameof(this.ToBitmapFromMemory), target.Format.ToString());
