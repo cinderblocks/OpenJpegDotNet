@@ -223,14 +223,6 @@ namespace OpenJpegDotNet
                 throw new NotSupportedException("This object is not supported.");
             }
 
-            if (channel != 3 && channel != 1)
-            {
-                if (planes != IntPtr.Zero)
-                    NativeMethods.stdlib_free(planes);
-
-                throw new NotSupportedException($"Unsupported number of channels: ${channel}.");
-            }
-
             Bitmap bitmap = null;
             BitmapData bitmapData = null;
 
@@ -288,6 +280,40 @@ namespace OpenJpegDotNet
                                     }
                                 }
                                 break;
+                            case 4:
+                                {
+                                    bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format32bppArgb);
+                                    var rect = new Rectangle(0, 0, (int)width, (int)height);
+                                    bitmapData = bitmap.LockBits(rect, ImageLockMode.WriteOnly, bitmap.PixelFormat);
+                                    var scan0 = bitmapData.Scan0;
+                                    var stride = bitmapData.Stride;
+
+                                    unsafe
+                                    {
+                                        var pSrc = (byte*)planes;
+                                        var pDest = (byte*)scan0;
+                                        var gap = stride - width * channel;
+                                        var size = width * height;
+                                        for (var y = 0; y < height; y++)
+                                        {
+                                            for (var x = 0; x < width; x++)
+                                            {
+                                                pDest[3] = 255; // alpha
+                                                pDest[2] = pSrc[0];
+                                                pDest[1] = pSrc[0 + size];
+                                                pDest[0] = pSrc[0 + size * 2];
+
+                                                pSrc += 1;
+                                                pDest += channel;
+                                            }
+
+                                            pDest += gap;
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                throw new NotSupportedException($"Unsupported number of channels: ${channel}.");
                         }
 
                         break;
@@ -336,14 +362,6 @@ namespace OpenJpegDotNet
                     NativeMethods.stdlib_free(planes);
 
                 throw new NotSupportedException("This object is not supported.");
-            }
-
-            if (channel != 3 && channel != 1)
-            {
-                if (planes != IntPtr.Zero)
-                    NativeMethods.stdlib_free(planes);
-
-                throw new NotSupportedException($"Unsupported number of channels: ${channel}.");
             }
 
             var raw = new byte[width * height * channel];
@@ -398,6 +416,34 @@ namespace OpenJpegDotNet
                                     }
                                 }
                                 break;
+                            case 4:
+                                {
+                                    unsafe
+                                    {
+                                        fixed (byte* dst = &raw[0])
+                                        {
+                                            var pSrc = (byte*)planes;
+                                            var pDest = dst;
+                                            var size = width * height;
+                                            for (var y = 0; y < height; y++)
+                                            {
+                                                for (var x = 0; x < width; x++)
+                                                {
+                                                    pDest[3] = 255; // alpha
+                                                    pDest[2] = pSrc[0];
+                                                    pDest[1] = pSrc[0 + size];
+                                                    pDest[0] = pSrc[0 + size * 2];
+
+                                                    pSrc += 1;
+                                                    pDest += channel;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            default:
+                                throw new NotSupportedException($"Unsupported number of channels: ${channel}.");
                         }
 
                         break;
