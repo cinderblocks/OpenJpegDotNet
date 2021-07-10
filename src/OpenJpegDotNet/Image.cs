@@ -202,10 +202,11 @@ namespace OpenJpegDotNet
         /// <summary>
         /// Converts this <see cref="Image"/> to a GDI+ <see cref="Bitmap"/>.
         /// </summary>
+        /// <param name="alpha">Export alpha channel</param>
         /// <returns>A <see cref="Bitmap"/> that represents the converted <see cref="Image"/>.</returns>
         /// <exception cref="ObjectDisposedException">This object is disposed.</exception>
         /// <exception cref="NotSupportedException">This object is not supported.</exception>
-        public Bitmap ToBitmap()
+        public Bitmap ToBitmap(bool alpha = true)
         {
             this.ThrowIfDisposed();
 
@@ -298,7 +299,7 @@ namespace OpenJpegDotNet
                                         {
                                             for (var x = 0; x < width; x++)
                                             {
-                                                pDest[3] = 255; // alpha
+                                                pDest[3] = alpha ? pSrc[0 + size * 3] : (byte)255;
                                                 pDest[2] = pSrc[0];
                                                 pDest[1] = pSrc[0 + size];
                                                 pDest[0] = pSrc[0 + size * 2];
@@ -344,9 +345,10 @@ namespace OpenJpegDotNet
         /// <summary>
         /// Converts this <see cref="Image"/> to a Bitmap <see cref="RawImage"/>.
         /// </summary>
+        /// <param name="alpha">Export alpha channel</param>
         /// <returns>A <see cref="RawImage"/> that represents the converted <see cref="Image"/>.</returns>
         /// <exception cref="NotSupportedException">This object is not supported.</exception>
-        public RawImage ToRawBitmap()
+        public RawImage ToRawBitmap(bool alpha = true)
         {
             this.ThrowIfDisposed();
 
@@ -429,7 +431,7 @@ namespace OpenJpegDotNet
                                             {
                                                 for (var x = 0; x < width; x++)
                                                 {
-                                                    pDest[3] = 255; // alpha
+                                                    pDest[3] = alpha ? pSrc[0 + size * 3] : (byte)255;
                                                     pDest[2] = pSrc[0];
                                                     pDest[1] = pSrc[0 + size];
                                                     pDest[0] = pSrc[0 + size * 2];
