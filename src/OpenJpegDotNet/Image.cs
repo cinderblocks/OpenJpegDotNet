@@ -228,7 +228,7 @@ namespace OpenJpegDotNet
                 if (planes != IntPtr.Zero)
                     NativeMethods.stdlib_free(planes);
 
-                throw new NotSupportedException("This object is not supported.");
+                throw new NotSupportedException($"Unsupported number of channels: ${channel}.");
             }
 
             Bitmap bitmap = null;
@@ -292,7 +292,7 @@ namespace OpenJpegDotNet
 
                         break;
                     default:
-                        throw new NotSupportedException("This object is not supported.");
+                        throw new NotSupportedException($"Unsupported pixel depth: ${pixel}.");
                 }
             }
             catch
@@ -343,7 +343,7 @@ namespace OpenJpegDotNet
                 if (planes != IntPtr.Zero)
                     NativeMethods.stdlib_free(planes);
 
-                throw new NotSupportedException("This object is not supported.");
+                throw new NotSupportedException($"Unsupported number of channels: ${channel}.");
             }
 
             var raw = new byte[width * height * channel];
@@ -402,7 +402,7 @@ namespace OpenJpegDotNet
 
                         break;
                     default:
-                        throw new NotSupportedException("This object is not supported.");
+                        throw new NotSupportedException($"Unsupported pixel depth: ${pixel}.");
                 }
             }
             finally
