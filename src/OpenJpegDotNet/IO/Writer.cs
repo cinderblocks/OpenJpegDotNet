@@ -24,6 +24,8 @@ namespace OpenJpegDotNet.IO
 
         private Codec _Codec;
 
+        private CompressionParameters _CompressionParameters;
+
         private OpenJpegDotNet.Image _Image;
 
         private readonly Stream _Stream;
@@ -59,13 +61,14 @@ namespace OpenJpegDotNet.IO
             OpenJpeg.StreamSetSeekFunction(this._Stream, this._SeekCallback);
             OpenJpeg.StreamSetSkipFunction(this._Stream, this._SkipCallback);
 
-            var compressionParameters = new CompressionParameters();
-            OpenJpeg.SetDefaultEncoderParameters(compressionParameters);
-            compressionParameters.TcpNumLayers = 1;
-            compressionParameters.CodingParameterDistortionAllocation = 1;
-
             _Codec = OpenJpeg.CreateCompress(CodecFormat.J2k);
-            OpenJpeg.SetupEncoder(_Codec, compressionParameters, _Image);
+
+            this._CompressionParameters = new CompressionParameters();
+            OpenJpeg.SetDefaultEncoderParameters(this._CompressionParameters);
+            this._CompressionParameters.TcpNumLayers = 1;
+            this._CompressionParameters.CodingParameterDistortionAllocation = 1;
+
+            OpenJpeg.SetupEncoder(_Codec, _CompressionParameters, _Image);
         }
 
         #endregion
@@ -165,21 +168,10 @@ namespace OpenJpegDotNet.IO
 
         #region Helpers
 
-        private CompressionParameters SetupEncoderParameters(Parameter parameter)
+        public void SetupEncoderParameters(CompressionParameters cparameters)
         {
-            var compressionParameters = new CompressionParameters();
-            OpenJpeg.SetDefaultEncoderParameters(compressionParameters);
-
-            if (parameter.Compression.HasValue)
-                compressionParameters.TcpRates[0] = 1000f / Math.Min(Math.Max(parameter.Compression.Value, 1), 1000);
-
-            compressionParameters.TcpNumLayers = 1;
-            compressionParameters.CodingParameterDistortionAllocation = 1;
-
-            if (!parameter.Compression.HasValue)
-                compressionParameters.TcpRates[0] = 4;
-
-            return compressionParameters;
+            _CompressionParameters = cparameters;
+            OpenJpeg.SetupEncoder(_Codec, _CompressionParameters, _Image);
         }
 
         #endregion
@@ -213,6 +205,7 @@ namespace OpenJpegDotNet.IO
             if (disposing)
             {
                 this._Codec?.Dispose();
+                this._CompressionParameters?.Dispose();
                 this._Stream.Dispose();
 
                 Marshal.FreeHGlobal(this._Buffer.Data);
