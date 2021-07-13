@@ -32,9 +32,9 @@ namespace OpenJpegDotNet.IO
 
         #region Constructors
 
-        public Writer(Bitmap bitmap)
+        public Writer(Bitmap bitmap, bool lossless = true)
         {
-            _Image = ImageHelper.FromBitmap(bitmap);
+            _Image = ImageHelper.FromBitmap(bitmap, lossless);
             int datalen = (int)(_Image.X1 * _Image.Y1 * _Image.NumberOfComponents + 1024);
 
             this._Buffer = new Buffer
@@ -61,7 +61,15 @@ namespace OpenJpegDotNet.IO
 
             var compressionParameters = new CompressionParameters();
             OpenJpeg.SetDefaultEncoderParameters(compressionParameters);
-            compressionParameters.TcpNumLayers = 1;
+            if (lossless) {
+                compressionParameters.TcpNumLayers = 1;
+                float[] rates = { 0 };
+            } else {
+                compressionParameters.TcpNumLayers = 5;
+                float[] rates = { 1920, 480, 120, 30, 10, 1 };
+                compressionParameters.TcpRates = rates;
+                if (_Image.NumberOfComponents >= 3) { compressionParameters.TcpMCT = 1; }
+            }
             compressionParameters.CodingParameterDistortionAllocation = 1;
 
             _Codec = OpenJpeg.CreateCompress(CodecFormat.J2k);
@@ -170,14 +178,17 @@ namespace OpenJpegDotNet.IO
             var compressionParameters = new CompressionParameters();
             OpenJpeg.SetDefaultEncoderParameters(compressionParameters);
 
-            if (parameter.Compression.HasValue)
-                compressionParameters.TcpRates[0] = 1000f / Math.Min(Math.Max(parameter.Compression.Value, 1), 1000);
+            if (parameter.Compression.HasValue) {
+                compressionParameters.TcpNumLayers = 5;
+                float[] rates = { 1920, 480, 120, 30, 10, 1 };
+                compressionParameters.TcpRates = rates;
+            } else {
+                compressionParameters.TcpNumLayers = 1;
+                float[] rates = { 0 };
+                compressionParameters.TcpRates = rates;
+            }
 
-            compressionParameters.TcpNumLayers = 1;
             compressionParameters.CodingParameterDistortionAllocation = 1;
-
-            if (!parameter.Compression.HasValue)
-                compressionParameters.TcpRates[0] = 4;
 
             return compressionParameters;
         }

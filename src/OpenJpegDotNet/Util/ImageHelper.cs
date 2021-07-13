@@ -11,7 +11,7 @@ namespace OpenJpegDotNet
 
         #region Methods
 
-        public static Image FromRaw(byte[] raw, int width, int height, int stride, int channels, bool interleaved)
+        public static Image FromRaw(byte[] raw, int width, int height, int stride, int channels, bool interleaved, bool lossless = true)
         {
             if (raw == null)
                 throw new ArgumentNullException(nameof(raw));
@@ -41,6 +41,17 @@ namespace OpenJpegDotNet
                         Width = (uint)width,
                         Height = (uint)height
                     };
+                }
+
+                if (lossless) {
+                    compressionParameters.TcpNumLayers = 1;
+                    float[] rates = { 0 };
+                    compressionParameters.TcpRates = rates;
+                } else {
+                    compressionParameters.TcpNumLayers = 5;
+                    float[] rates = { 1920, 480, 120, 30, 10, 1 };
+                    compressionParameters.TcpRates = rates;
+                    if (channels >= 3) { compressionParameters.TcpMCT = 1; }
                 }
 
                 var image = OpenJpeg.ImageCreate((uint)channels, componentParametersArray, colorSpace);
@@ -108,7 +119,7 @@ namespace OpenJpegDotNet
             }
         }
 
-        public static Image FromBitmap(Bitmap bitmap)
+        public static Image FromBitmap(Bitmap bitmap, bool lossless = true)
         {
             if (bitmap == null)
                 throw new ArgumentNullException(nameof(bitmap));
@@ -170,6 +181,17 @@ namespace OpenJpegDotNet
                             Width = (uint)width,
                             Height = (uint)height
                         };
+                    }
+
+                    if (lossless) {
+                        compressionParameters.TcpNumLayers = 1;
+                        float[] rates = { 0 };
+                        compressionParameters.TcpRates = rates;
+                    } else {
+                        compressionParameters.TcpNumLayers = 5;
+                        float[] rates = { 1920, 480, 120, 30, 10, 1 };
+                        compressionParameters.TcpRates = rates;
+                        if (channels >= 3) { compressionParameters.TcpMCT = 1; }
                     }
 
                     var image = OpenJpeg.ImageCreate((uint)channels, componentParametersArray, colorSpace);
