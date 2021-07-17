@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -75,23 +74,11 @@ namespace OpenJpegDotNet.IO
 
         #region Properties
 
-        public int Height
-        {
-            get;
-            private set;
-        }
-
         /// <summary>
         /// Gets a value indicating whether this instance has been disposed.
         /// </summary>
         /// <returns>true if this instance has been disposed; otherwise, false.</returns>
         public bool IsDisposed
-        {
-            get;
-            private set;
-        }
-
-        public int Width
         {
             get;
             private set;
@@ -103,9 +90,12 @@ namespace OpenJpegDotNet.IO
 
         public byte[] Encode()
         {
-            OpenJpeg.StartCompress(_Codec, _Image, _Stream);
-            OpenJpeg.Encode(_Codec, _Stream);
-            OpenJpeg.EndCompress(_Codec, _Stream);
+            if (_Codec == null || _Codec.IsDisposed || _Image == null || _Image.IsDisposed
+                || _Stream == null || _Stream.IsDisposed) { throw new InvalidOperationException(); }
+
+            if (!OpenJpeg.StartCompress(_Codec, _Image, _Stream)) { throw new InvalidOperationException(); }
+            if (!OpenJpeg.Encode(_Codec, _Stream)) { throw new InvalidOperationException(); }
+            if (!OpenJpeg.EndCompress(_Codec, _Stream)) { throw new InvalidOperationException(); }
 
             var datast = Marshal.PtrToStructure<Buffer>(_UserData);
             var output = new byte[datast.Position];
@@ -168,10 +158,12 @@ namespace OpenJpegDotNet.IO
 
         #region Helpers
 
-        public void SetupEncoderParameters(CompressionParameters cparameters)
+        public bool SetupEncoderParameters(CompressionParameters cparameters)
         {
+            if (cparameters == null) { throw new ArgumentNullException(); }
+
             _CompressionParameters = cparameters;
-            OpenJpeg.SetupEncoder(_Codec, _CompressionParameters, _Image);
+            return OpenJpeg.SetupEncoder(_Codec, _CompressionParameters, _Image);
         }
 
         #endregion
@@ -186,7 +178,6 @@ namespace OpenJpegDotNet.IO
         public void Dispose()
         {
             this.Dispose(true);
-            //GC.SuppressFinalize(this);
         }
 
         /// <summary>

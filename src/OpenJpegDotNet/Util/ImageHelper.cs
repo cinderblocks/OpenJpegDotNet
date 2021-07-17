@@ -133,7 +133,7 @@ namespace OpenJpegDotNet
                     break;
                 case PixelFormat.Format8bppIndexed:
                     channels = 1;
-                    colorSpace = ColorSpace.Srgb;
+                    colorSpace = ColorSpace.Gray;
                     byteAllocated = 1;
                     break;
                 default:
