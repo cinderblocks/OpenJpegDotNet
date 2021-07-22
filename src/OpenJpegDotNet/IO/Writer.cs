@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
 namespace OpenJpegDotNet.IO
@@ -97,8 +96,8 @@ namespace OpenJpegDotNet.IO
             if (!OpenJpeg.Encode(_Codec, _Stream)) { throw new InvalidOperationException(); }
             if (!OpenJpeg.EndCompress(_Codec, _Stream)) { throw new InvalidOperationException(); }
 
-            var datast = Marshal.PtrToStructure<Buffer>(_UserData);
-            var output = new byte[datast.Position];
+            var data_st = Marshal.PtrToStructure<Buffer>(_UserData);
+            var output = new byte[data_st.Position];
             Marshal.Copy(_Buffer.Data, output, 0, output.Length);
 
             return output;
@@ -111,8 +110,11 @@ namespace OpenJpegDotNet.IO
             unsafe
             {
                 var buf = (Buffer*)userData;
-                var position = Math.Min((ulong)buf->Length, bytes);
-                buf->Position = (int)position;
+                if (buf == null || buf->Data == IntPtr.Zero || buf->Length == 0)
+                    return 0;
+
+                buf->Position = (int)Math.Min(bytes, (ulong)buf->Length);
+
                 return 1;
             }
         }
@@ -122,16 +124,12 @@ namespace OpenJpegDotNet.IO
             unsafe
             {
                 var buf = (Buffer*)userData;
-                var bytesToSkip = (int)Math.Min((ulong)buf->Length, bytes);
-                if (bytesToSkip > 0)
-                {
-                    buf->Position += bytesToSkip;
-                    return bytesToSkip;
-                }
-                else
-                {
-                    return unchecked(-1);
-                }
+                if (buf == null || buf->Data == IntPtr.Zero || buf->Length == 0)
+                    return -1;
+
+                buf->Position = (int)Math.Min((ulong)buf->Position + bytes, (ulong)buf->Length);
+
+                return (long)bytes;
             }
         }
 
@@ -140,17 +138,19 @@ namespace OpenJpegDotNet.IO
             unsafe
             {
                 var buf = (Buffer*)userData;
-                var bytesToRead = (int)Math.Min((ulong)buf->Length, bytes);
-                if (bytesToRead > 0)
-                {
-                    NativeMethods.cstd_memcpy(buffer, IntPtr.Add(buf->Data, buf->Position), bytesToRead);
-                    buf->Position += bytesToRead;
-                    return (ulong)bytesToRead;
-                }
-                else
-                {
+                if (buf == null || buf->Data == IntPtr.Zero || buf->Length == 0)
                     return unchecked((ulong)-1);
-                }
+
+                if (buf->Position >= buf->Length)
+                    return unchecked((ulong)-1);
+
+                var bufLength = (ulong)(buf->Length - buf->Position);
+                var writeLength = bytes < bufLength ? bytes : bufLength;
+
+                System.Buffer.MemoryCopy((void*)buffer, (void*)IntPtr.Add(buf->Data, buf->Position), writeLength, writeLength);
+                buf->Position += (int)writeLength;
+
+                return (ulong)writeLength;
             }
         }
 
@@ -161,6 +161,8 @@ namespace OpenJpegDotNet.IO
         public bool SetupEncoderParameters(CompressionParameters cparameters)
         {
             if (cparameters == null) { throw new ArgumentNullException(); }
+
+            _CompressionParameters?.Dispose();
 
             _CompressionParameters = cparameters;
             return OpenJpeg.SetupEncoder(_Codec, _CompressionParameters, _Image);
