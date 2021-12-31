@@ -320,7 +320,7 @@ namespace OpenJpegDotNet
 
                         break;
                     default:
-                        throw new NotSupportedException("This object is not supported.");
+                        throw new NotSupportedException($"Unsupported pixel depth: ${pixel}.");
                 }
             }
             catch

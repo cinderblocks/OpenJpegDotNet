@@ -1,0 +1,59 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "OpenJpegDotNetNative",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "OpenJpegDotNetNative::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-OpenJpegDotNetNative-Debug-99396c9d501792c36385.json",
+					"name" : "OpenJpegDotNetNative",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/slunk/Development/OpenJpegDotNet/src/OpenJpegDotNet.Native/out/build/x64-Debug",
+		"source" : "C:/Users/slunk/Development/OpenJpegDotNet/src/OpenJpegDotNet.Native"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 2
+	}
+}

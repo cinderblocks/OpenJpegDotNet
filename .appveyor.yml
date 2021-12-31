@@ -1,0 +1,66 @@
+init:
+  - ps: if ($env:APPVEYOR_REPO_TAG -eq "true") { $env:TAG_VERSION = "$env:APPVEYOR_REPO_TAG_NAME.$env:APPVEYOR_BUILD_NUMBER" } else { $env:TAG_VERSION = "v0.1.0.$env:APPVEYOR_BUILD_NUMBER-alpha" }
+  - ps: $env:TAG_VERSION = $env:TAG_VERSION -replace 'v',''
+  - ps: Write-Host "Setting version to '$env:TAG_VERSION'"
+  - ps: Update-AppveyorBuild -Version "$env:TAG_VERSION"
+
+  matrix:
+  - job_name: Windows x64 Build
+    platform: x64
+    appveyor_build_worker_image: Visual Studio 2019
+    configuration: Release
+  - job_name: Windows x86 Build
+    platform: x86
+    appveyor_build_worker_image: Visual Studio 2019
+    configuration: Release
+  - job_name: Linux Build
+    platform: x64
+    appveyor_build_worker_image: Ubuntu2004
+    configuration: Release
+  - job_name: MacOS Build
+    platform: x64
+    appveyor_build_worker_image: macos-mojave
+    configuration: Release
+
+nuget:
+  disable_publish_on_pr: true
+
+build:
+  project: LibreMetaverse.sln
+  parallel: true
+  verbosity: minimal
+  publish_nuget: true
+  publish_nuget_symbols: false
+
+cache:
+  - packages -> **\packages.config
+  - '%LocalAppData%\NuGet\Cache'
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+
+before_build:
+  - git submodule update --init --recursive
+
+after_build:
+  - ps: if ($isWindows) { Get-ChildItem -Filter "*.nupkg" -Path "C:\Users\appveyor\AppData\Local\Temp\" -recurse | Compress-Archive -DestinationPath "nuget_libraries.zip" -Verbose }
+
+artifacts:
+  - path: 'nuget_libraries.zip'
+    name: 'Nuget Library Archive'
+    type: Auto
+
+deploy:
+  - provider: Webhook
+    url: https://app.signpath.io/API/v1/8446d24b-7c29-473d-b13c-83bac9d9db17/Integrations/AppVeyor?ProjectKey=LibreMetaverse&SigningPolicyKey=LibreMetaverse
+    authorization:
+      secure: 5X22VkhN0wjILZOvbIPXRUutxFSiwHxhe9e7xYxEMGhxq+mAyMptnWJ0PH20YS8+v+nsnV7woz0pgYHBTEYahQ==
+    skip_symbols: true
+    artifact: nuget_libraries.zip
+    draft: false
+    prerelease: false
+    on:
+      job_name: Windows Build
