@@ -211,6 +211,7 @@ namespace OpenJpegDotNet
             this.ThrowIfDisposed();
 
             var ret = NativeMethods.openjpeg_openjp2_extensions_imagetobmp(this.NativePtr,
+                                                                           false,
                                                                            out var planes,
                                                                            out var width,
                                                                            out var height,
@@ -319,7 +320,7 @@ namespace OpenJpegDotNet
 
                         break;
                     default:
-                        throw new NotSupportedException($"Unsupported pixel depth: ${pixel}.");
+                        throw new NotSupportedException("This object is not supported.");
                 }
             }
             catch
@@ -353,6 +354,7 @@ namespace OpenJpegDotNet
             this.ThrowIfDisposed();
 
             var ret = NativeMethods.openjpeg_openjp2_extensions_imagetobmp(this.NativePtr,
+                                                                           false,
                                                                            out var planes,
                                                                            out var width,
                                                                            out var height,
