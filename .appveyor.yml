@@ -16,7 +16,7 @@ environment:
     configuration: Release
   - job_name: Linux Build
     platform: x64
-    appveyor_build_worker_image: Ubuntu2004
+    appveyor_build_worker_image: Ubuntu
     configuration: Release
   - job_name: MacOS Build
     platform: x64
@@ -55,6 +55,30 @@ for:
       - cmd: cd nuget
       - cmd: git clean -fxd .
       - cmd: pwsh ./BuildWindows.ps1
+    artifacts:
+      - path: nuget/artifacts
+        name: Nupkgs
+        type: Auto
+  -
+    matrix:
+      only:
+        - job_name: Linux Build
+    build_script:
+      - cmd: cd nuget
+      - cmd: git clean -fxd .
+      - cmd: pwsh ./BuildUbuntu18.ps1
+    artifacts:
+      - path: nuget/artifacts
+        name: Nupkgs
+        type: Auto
+  -
+    matrix:
+      only:
+        - job_name: MacOS Build
+    build_script:
+      - cmd: cd nuget
+      - cmd: git clean -fxd .
+      - cmd: pwsh BuildOSX.ps1
     artifacts:
       - path: nuget/artifacts
         name: Nupkgs
