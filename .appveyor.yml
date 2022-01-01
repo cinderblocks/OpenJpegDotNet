@@ -6,12 +6,8 @@ init:
 
 environment:
   matrix:
-  - job_name: Windows x64 Build
+  - job_name: Windows Build
     platform: x64
-    appveyor_build_worker_image: Visual Studio 2019
-    configuration: Release
-  - job_name: Windows x86 Build
-    platform: x86
     appveyor_build_worker_image: Visual Studio 2019
     configuration: Release
   - job_name: Linux Build
@@ -34,26 +30,12 @@ for:
   -
     matrix:
       only:
-        - job_name: Windows x64 Build
+        - job_name: Windows Build
     before_build:
       - cmd: chcp 65001
+      - cmd: git clean -fxd nuget/
     build_script:
       - cmd: cd nuget
-      - cmd: git clean -fxd .
-      - cmd: pwsh ./BuildWindows.ps1
-    artifacts:
-      - path: nuget/artifacts
-        name: Nupkgs
-        type: Auto
-  -
-    matrix:
-      only:
-        - job_name: Windows x86 Build
-    before_build:
-      - cmd: chcp 65001
-    build_script:
-      - cmd: cd nuget
-      - cmd: git clean -fxd .
       - cmd: pwsh ./BuildWindows.ps1
     artifacts:
       - path: nuget/artifacts
@@ -63,9 +45,10 @@ for:
     matrix:
       only:
         - job_name: Linux Build
+    before_build:
+      - cmd: git clean -fxd nuget/
     build_script:
       - cmd: cd nuget
-      - cmd: git clean -fxd .
       - cmd: pwsh ./BuildUbuntu18.ps1
     artifacts:
       - path: nuget/artifacts
@@ -75,9 +58,10 @@ for:
     matrix:
       only:
         - job_name: MacOS Build
+    before_build:
+      - cmd: git clean -fxd nuget/
     build_script:
       - cmd: cd nuget
-      - cmd: git clean -fxd .
       - cmd: pwsh BuildOSX.ps1
     artifacts:
       - path: nuget/artifacts

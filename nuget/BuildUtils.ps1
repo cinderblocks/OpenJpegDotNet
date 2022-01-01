@@ -59,9 +59,9 @@ class Config
       64
    )
 
-   $VisualStudio = "Visual Studio 15 2017"
+   $VisualStudio = "Visual Studio 17 2022"
 
-   $VisualStudioConsole = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
+   $VisualStudioConsole = "C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 
    static $BuildLibraryWindowsHash =
    @{
