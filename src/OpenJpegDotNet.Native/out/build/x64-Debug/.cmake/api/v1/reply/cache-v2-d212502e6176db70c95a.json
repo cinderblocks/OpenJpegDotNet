@@ -1287,7 +1287,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "general;/lib/openjp2.lib;"
+			"value" : "general;openjp2;"
 		},
 		{
 			"name" : "OpenJpegDotNetNative_SOURCE_DIR",

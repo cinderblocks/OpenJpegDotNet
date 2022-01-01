@@ -46,7 +46,7 @@ build cmake_object_order_depends_target_OpenJpegDotNetNative: phony || CMakeFile
 build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\config.cpp.obj: CXX_COMPILER__OpenJpegDotNetNative_Debug ..\..\..\openjpeg\config.cpp || cmake_object_order_depends_target_OpenJpegDotNetNative
   DEFINES = -DOpenJpegDotNetNative_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
-  INCLUDES = -I\include
+  INCLUDES = -IC:\dev\openjpeg\build\include\openjpeg-2.4
   OBJECT_DIR = CMakeFiles\OpenJpegDotNetNative.dir
   OBJECT_FILE_DIR = CMakeFiles\OpenJpegDotNetNative.dir\openjpeg
   TARGET_COMPILE_PDB = CMakeFiles\OpenJpegDotNetNative.dir\
@@ -55,7 +55,7 @@ build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\config.cpp.obj: CXX_COMPILER_
 build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\cstd\string.cpp.obj: CXX_COMPILER__OpenJpegDotNetNative_Debug ..\..\..\openjpeg\cstd\string.cpp || cmake_object_order_depends_target_OpenJpegDotNetNative
   DEFINES = -DOpenJpegDotNetNative_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
-  INCLUDES = -I\include
+  INCLUDES = -IC:\dev\openjpeg\build\include\openjpeg-2.4
   OBJECT_DIR = CMakeFiles\OpenJpegDotNetNative.dir
   OBJECT_FILE_DIR = CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\cstd
   TARGET_COMPILE_PDB = CMakeFiles\OpenJpegDotNetNative.dir\
@@ -64,7 +64,7 @@ build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\cstd\string.cpp.obj: CXX_COMP
 build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\extensions.cpp.obj: CXX_COMPILER__OpenJpegDotNetNative_Debug ..\..\..\openjpeg\openjp2\extensions.cpp || cmake_object_order_depends_target_OpenJpegDotNetNative
   DEFINES = -DOpenJpegDotNetNative_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
-  INCLUDES = -I\include
+  INCLUDES = -IC:\dev\openjpeg\build\include\openjpeg-2.4
   OBJECT_DIR = CMakeFiles\OpenJpegDotNetNative.dir
   OBJECT_FILE_DIR = CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2
   TARGET_COMPILE_PDB = CMakeFiles\OpenJpegDotNetNative.dir\
@@ -73,7 +73,7 @@ build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\extensions.cpp.obj: C
 build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\openjpeg.cpp.obj: CXX_COMPILER__OpenJpegDotNetNative_Debug ..\..\..\openjpeg\openjp2\openjpeg.cpp || cmake_object_order_depends_target_OpenJpegDotNetNative
   DEFINES = -DOpenJpegDotNetNative_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
-  INCLUDES = -I\include
+  INCLUDES = -IC:\dev\openjpeg\build\include\openjpeg-2.4
   OBJECT_DIR = CMakeFiles\OpenJpegDotNetNative.dir
   OBJECT_FILE_DIR = CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2
   TARGET_COMPILE_PDB = CMakeFiles\OpenJpegDotNetNative.dir\
@@ -82,7 +82,7 @@ build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\openjpeg.cpp.obj: CXX
 build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\opj_decompress.cpp.obj: CXX_COMPILER__OpenJpegDotNetNative_Debug ..\..\..\openjpeg\openjp2\opj_decompress.cpp || cmake_object_order_depends_target_OpenJpegDotNetNative
   DEFINES = -DOpenJpegDotNetNative_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
-  INCLUDES = -I\include
+  INCLUDES = -IC:\dev\openjpeg\build\include\openjpeg-2.4
   OBJECT_DIR = CMakeFiles\OpenJpegDotNetNative.dir
   OBJECT_FILE_DIR = CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2
   TARGET_COMPILE_PDB = CMakeFiles\OpenJpegDotNetNative.dir\
@@ -91,7 +91,7 @@ build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\opj_decompress.cpp.ob
 build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\stdlib.cpp.obj: CXX_COMPILER__OpenJpegDotNetNative_Debug ..\..\..\openjpeg\stdlib.cpp || cmake_object_order_depends_target_OpenJpegDotNetNative
   DEFINES = -DOpenJpegDotNetNative_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
-  INCLUDES = -I\include
+  INCLUDES = -IC:\dev\openjpeg\build\include\openjpeg-2.4
   OBJECT_DIR = CMakeFiles\OpenJpegDotNetNative.dir
   OBJECT_FILE_DIR = CMakeFiles\OpenJpegDotNetNative.dir\openjpeg
   TARGET_COMPILE_PDB = CMakeFiles\OpenJpegDotNetNative.dir\
@@ -100,7 +100,7 @@ build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\stdlib.cpp.obj: CXX_COMPILER_
 build CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\string.cpp.obj: CXX_COMPILER__OpenJpegDotNetNative_Debug ..\..\..\openjpeg\string.cpp || cmake_object_order_depends_target_OpenJpegDotNetNative
   DEFINES = -DOpenJpegDotNetNative_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1 -std:c++17
-  INCLUDES = -I\include
+  INCLUDES = -IC:\dev\openjpeg\build\include\openjpeg-2.4
   OBJECT_DIR = CMakeFiles\OpenJpegDotNetNative.dir
   OBJECT_FILE_DIR = CMakeFiles\OpenJpegDotNetNative.dir\openjpeg
   TARGET_COMPILE_PDB = CMakeFiles\OpenJpegDotNetNative.dir\
@@ -110,7 +110,7 @@ build CMakeFiles\OpenJpegDotNetNative.dir\version.rc.res: RC_COMPILER__OpenJpegD
   DEFINES = -DOpenJpegDotNetNative_EXPORTS
   DEP_FILE = CMakeFiles\OpenJpegDotNetNative.dir\version.rc.res.d
   FLAGS = -DWIN32 -D_DEBUG
-  INCLUDES = -I \include
+  INCLUDES = -I C:\dev\openjpeg\build\include\openjpeg-2.4
   OBJECT_DIR = CMakeFiles\OpenJpegDotNetNative.dir
   OBJECT_FILE_DIR = CMakeFiles\OpenJpegDotNetNative.dir
   TARGET_COMPILE_PDB = CMakeFiles\OpenJpegDotNetNative.dir\
@@ -124,10 +124,10 @@ build CMakeFiles\OpenJpegDotNetNative.dir\version.rc.res: RC_COMPILER__OpenJpegD
 #############################################
 # Link the shared library OpenJpegDotNetNative.dll
 
-build OpenJpegDotNetNative.dll OpenJpegDotNetNative.lib: CXX_SHARED_LIBRARY_LINKER__OpenJpegDotNetNative_Debug CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\config.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\cstd\string.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\extensions.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\openjpeg.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\opj_decompress.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\stdlib.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\string.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\version.rc.res | \lib\openjp2.lib
+build OpenJpegDotNetNative.dll OpenJpegDotNetNative.lib: CXX_SHARED_LIBRARY_LINKER__OpenJpegDotNetNative_Debug CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\config.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\cstd\string.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\extensions.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\openjpeg.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\openjp2\opj_decompress.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\stdlib.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\openjpeg\string.cpp.obj CMakeFiles\OpenJpegDotNetNative.dir\version.rc.res | C$:\\lib\openjp2.lib
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL
-  LINK_LIBRARIES = \lib\openjp2.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_LIBRARIES = C:\\lib\openjp2.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = CMakeFiles\OpenJpegDotNetNative.dir
   POST_BUILD = cd .
   PRE_LINK = cd .

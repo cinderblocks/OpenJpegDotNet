@@ -38,7 +38,7 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 123,
+				"line" : 133,
 				"parent" : 0
 			},
 			{
@@ -71,7 +71,7 @@
 			[
 				{
 					"backtrace" : 3,
-					"path" : "/include"
+					"path" : "C:/dev/openjpeg/build/include/openjpeg-2.4"
 				}
 			],
 			"language" : "CXX",
@@ -111,7 +111,7 @@
 			[
 				{
 					"backtrace" : 3,
-					"path" : "/include"
+					"path" : "C:/dev/openjpeg/build/include/openjpeg-2.4"
 				}
 			],
 			"language" : "RC",
@@ -132,7 +132,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "\\lib\\openjp2.lib",
+				"fragment" : "C:\\\\lib\\openjp2.lib",
 				"role" : "libraries"
 			},
 			{

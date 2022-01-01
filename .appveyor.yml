@@ -4,6 +4,7 @@ init:
   - ps: Write-Host "Setting version to '$env:TAG_VERSION'"
   - ps: Update-AppveyorBuild -Version "$env:TAG_VERSION"
 
+environment:
   matrix:
   - job_name: Windows x64 Build
     platform: x64
@@ -22,45 +23,39 @@ init:
     appveyor_build_worker_image: macos-mojave
     configuration: Release
 
-nuget:
-  disable_publish_on_pr: true
-
-build:
-  project: LibreMetaverse.sln
-  parallel: true
-  verbosity: minimal
-  publish_nuget: true
-  publish_nuget_symbols: false
-
-cache:
-  - packages -> **\packages.config
-  - '%LocalAppData%\NuGet\Cache'
-
-dotnet_csproj:
-  patch: true
-  file: '**\*.csproj'
-  version: '{version}'
-  package_version: '{version}'
+matrix:
+  fast_finish: true
 
 before_build:
   - git submodule update --init --recursive
 
-after_build:
-  - ps: if ($isWindows) { Get-ChildItem -Filter "*.nupkg" -Path "C:\Users\appveyor\AppData\Local\Temp\" -recurse | Compress-Archive -DestinationPath "nuget_libraries.zip" -Verbose }
-
-artifacts:
-  - path: 'nuget_libraries.zip'
-    name: 'Nuget Library Archive'
-    type: Auto
-
-deploy:
-  - provider: Webhook
-    url: https://app.signpath.io/API/v1/8446d24b-7c29-473d-b13c-83bac9d9db17/Integrations/AppVeyor?ProjectKey=LibreMetaverse&SigningPolicyKey=LibreMetaverse
-    authorization:
-      secure: 5X22VkhN0wjILZOvbIPXRUutxFSiwHxhe9e7xYxEMGhxq+mAyMptnWJ0PH20YS8+v+nsnV7woz0pgYHBTEYahQ==
-    skip_symbols: true
-    artifact: nuget_libraries.zip
-    draft: false
-    prerelease: false
-    on:
-      job_name: Windows Build
+# job specific
+for:
+  -
+    matrix:
+      only:
+        - job_name: Windows x64 Build
+    before_build:
+      - cmd: chcp 65001
+    build_script:
+      - cmd: cd nuget
+      - cmd: git clean -fxd .
+      - cmd: pwsh ./BuildWindows.ps1
+    artifacts:
+      - path: nuget/artifacts
+        name: Nupkgs
+        type: Auto
+  -
+    matrix:
+      only:
+        - job_name: Windows x86 Build
+    before_build:
+      - cmd: chcp 65001
+    build_script:
+      - cmd: cd nuget
+      - cmd: git clean -fxd .
+      - cmd: pwsh ./BuildWindows.ps1
+    artifacts:
+      - path: nuget/artifacts
+        name: Nupkgs
+        type: Auto
