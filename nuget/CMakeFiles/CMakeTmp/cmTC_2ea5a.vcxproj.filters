@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\slunk\Development\OpenJpegDotNet\nuget\CMakeFiles\CMakeTmp\CheckIncludeFile.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{1280541A-1C91-3917-845D-72B4652C1E56}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
