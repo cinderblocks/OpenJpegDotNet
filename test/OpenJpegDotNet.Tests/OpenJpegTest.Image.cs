@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using IronSoftware.Drawing;
 using Xunit;
 
 using OpenJpegDotNet.IO;
+using SkiaSharp;
 
 // ReSharper disable once CheckNamespace
 namespace OpenJpegDotNet.Tests
@@ -444,7 +445,14 @@ namespace OpenJpegDotNet.Tests
                     Directory.CreateDirectory(directory);
                     bitmapPath = Path.Combine(directory, Path.GetFileName(bitmapPath));
 
-                    bitmap.Save(bitmapPath, ImageFormat.Bmp);
+                    // Although SkiaSharp requires working with Bitmaps, it does not support encoding them...
+                    // We'll have to make do with AnyBitmap support
+                    
+                    //using var encData = bitmap.Encode(SKEncodedImageFormat.Bmp, 100);
+                    //using var fsHandle = File.OpenWrite(bitmapPath);
+                    //encData.SaveTo(fsHandle);
+                    AnyBitmap anybitmap = bitmap;
+                    anybitmap.SaveAs(bitmapPath);
                 }
 
                 this.DisposeAndCheckDisposedState(image);
@@ -483,7 +491,14 @@ namespace OpenJpegDotNet.Tests
                     Directory.CreateDirectory(directory);
                     bitmapPath = Path.Combine(directory, Path.GetFileName(bitmapPath));
 
-                    bitmap.Save(bitmapPath, ImageFormat.Bmp);
+                    // Although SkiaSharp requires working with Bitmaps, it does not support encoding them...
+                    // We'll have to make do with AnyBitmap support
+                    
+                    //using var encData = bitmap.Encode(SKEncodedImageFormat.Bmp, 100);
+                    //using var fsHandle = File.OpenWrite(bitmapPath);
+                    //encData.SaveTo(fsHandle);
+                    AnyBitmap anybitmap = bitmap;
+                    anybitmap.SaveAs(bitmapPath);
                 }
             }
         }

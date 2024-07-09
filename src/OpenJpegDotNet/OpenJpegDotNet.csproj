@@ -2,21 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Authors>Takuya Takeuchi</Authors>
+    <Authors>Sjofn LLC</Authors>
     <Description>.NET wrapper for OpenJpeg written in C#</Description>
     <Company />
-    <Copyright>© Takuya Takeuchi 2021</Copyright>
-    <Version>2.4.0</Version>
-    <RepositoryUrl>https://github.com/takuya-takeuchi/OpenJpegDotNet</RepositoryUrl>
+    <Copyright>Copyright Takuya Takeuchi, 2021, Sjofn LLC, 2022-2024</Copyright>
+    <Version>2.5.0</Version>
+    <RepositoryUrl>https://github.com/cinderblocks/OpenJpegDotNet</RepositoryUrl>
     <PackageTags>openjpeg .net jpeg2000</PackageTags>
-    <PackageLicenseUrl></PackageLicenseUrl>  
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <license>MIT</license>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile></DocumentationFile>
     <DefineConstants>$(DefineConstants);TRACE;DEBUG;$(CustomDefinition)</DefineConstants>
   </PropertyGroup>
 
@@ -26,34 +24,23 @@
     <DefineConstants>$(DefineConstants);$(CustomDefinition)</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="docs\" />
-  </ItemGroup>
-
   <PropertyGroup Condition="$(TargetFramework.Contains('netstandard')) Or $(TargetFramework.Contains('netcoreapp')) ">
     <DefineConstants>$(DefineConstants);DOTNETCORE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup Condition="!$(TargetFramework.Contains('netstandard')) And !$(TargetFramework.Contains('netcoreapp')) ">
-    <Reference Include="System.Drawing" />
     <Reference Include="System" />
-  </ItemGroup>
-
-  <ItemGroup Condition="$(TargetFramework.Contains('netstandard')) Or $(TargetFramework.Contains('netcoreapp')) ">
-    <PackageReference Include="System.Drawing.Common">
-      <Version>5.0.2</Version>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\LICENSE.txt">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+    <PackageReference Include="SkiaSharp" Version="2.88.8" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.8" />
   </ItemGroup>
 
 </Project>

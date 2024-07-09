@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using SkiaSharp;
 
 namespace OpenJpegDotNet
 {
@@ -200,13 +199,13 @@ namespace OpenJpegDotNet
         #region Methods
 
         /// <summary>
-        /// Converts this <see cref="Image"/> to a GDI+ <see cref="Bitmap"/>.
+        /// Converts this <see cref="Image"/> to a <see cref="SKBitmap"/>.
         /// </summary>
         /// <param name="alpha">Export alpha channel</param>
-        /// <returns>A <see cref="Bitmap"/> that represents the converted <see cref="Image"/>.</returns>
+        /// <returns>A <see cref="SKBitmap"/> that represents the converted <see cref="Image"/>.</returns>
         /// <exception cref="ObjectDisposedException">This object is disposed.</exception>
         /// <exception cref="NotSupportedException">This object is not supported.</exception>
-        public Bitmap ToBitmap(bool alpha = true)
+        public SKBitmap ToBitmap(bool alpha = true)
         {
             this.ThrowIfDisposed();
 
@@ -222,10 +221,9 @@ namespace OpenJpegDotNet
                     NativeMethods.stdlib_free(planes);
 
                 throw new NotSupportedException("This object is not supported.");
-            }
-
-            Bitmap bitmap = null;
-            BitmapData bitmapData = null;
+            } 
+            
+            SKBitmap bitmap = null;
 
             try
             {
@@ -237,63 +235,54 @@ namespace OpenJpegDotNet
                         {
                             case 1:
                                 {
-                                    bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format8bppIndexed);
-                                    var rect = new Rectangle(0, 0, (int)width, (int)height);
-                                    bitmapData = bitmap.LockBits(rect, ImageLockMode.WriteOnly, bitmap.PixelFormat);
-                                    var scan0 = bitmapData.Scan0;
-                                    var stride = bitmapData.Stride;
-                                    for (var y = 0; y < height; y++)
-                                    {
-                                        var src = IntPtr.Add(planes, (int)(y * width));
-                                        var dest = IntPtr.Add(scan0, y * stride);
-                                        NativeMethods.cstd_memcpy(dest, src, (int)width);
-                                    }
+                                    var imgInfo = new SKImageInfo((int)width, (int)height);
+                                    bitmap = new SKBitmap(imgInfo);
+                                    bitmap.InstallPixels(imgInfo, planes, bitmap.RowBytes);
                                 }
                                 break;
                             case 3:
                                 {
-                                    bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format24bppRgb);
-                                    var rect = new Rectangle(0, 0, (int)width, (int)height);
-                                    bitmapData = bitmap.LockBits(rect, ImageLockMode.WriteOnly, bitmap.PixelFormat);
-                                    var scan0 = bitmapData.Scan0;
-                                    var stride = bitmapData.Stride;
+                                    var imgInfo = new SKImageInfo((int)width, (int)height, SKColorType.Rgb888x, SKAlphaType.Opaque);
+                                    bitmap = new SKBitmap(imgInfo);
+                                    
+                                    var pixelsAddr = bitmap.GetPixels();
 
                                     unsafe
                                     {
                                         var pSrc = (byte*)planes;
-                                        var pDest = (byte*)scan0;
-                                        var gap = stride - width * channel;
+                                        var pDest = (byte*)pixelsAddr.ToPointer();
+                                        var gap = bitmap.RowBytes - width * channel;
                                         var size = width * height;
+                                        
                                         for (var y = 0; y < height; y++)
                                         {
                                             for (var x = 0; x < width; x++)
                                             {
-                                                pDest[2] = pSrc[0];
+                                                //pDest[3] = 0xFF;
+                                                pDest[0] = pSrc[0];
                                                 pDest[1] = pSrc[0 + size];
-                                                pDest[0] = pSrc[0 + size * 2];
+                                                pDest[2] = pSrc[0 + size * 2];
 
                                                 pSrc += 1;
-                                                pDest += channel;
+                                                pDest += channel+1;
                                             }
 
-                                            pDest += gap;
+                                            //pDest += gap;
                                         }
                                     }
                                 }
                                 break;
                             case 4:
                                 {
-                                    bitmap = new Bitmap((int)width, (int)height, PixelFormat.Format32bppArgb);
-                                    var rect = new Rectangle(0, 0, (int)width, (int)height);
-                                    bitmapData = bitmap.LockBits(rect, ImageLockMode.WriteOnly, bitmap.PixelFormat);
-                                    var scan0 = bitmapData.Scan0;
-                                    var stride = bitmapData.Stride;
+                                    var imgInfo = new SKImageInfo((int)width, (int)height, SKColorType.Rgba8888, SKAlphaType.Unpremul);
+                                    bitmap = new SKBitmap(imgInfo);
+                                    var pixelsAddr = bitmap.GetPixels();
 
                                     unsafe
                                     {
                                         var pSrc = (byte*)planes;
-                                        var pDest = (byte*)scan0;
-                                        var gap = stride - width * channel;
+                                        var pDest = (byte*)pixelsAddr.ToPointer();
+                                        var gap = bitmap.RowBytes - width * channel;
                                         var size = width * height;
                                         for (var y = 0; y < height; y++)
                                         {
@@ -316,27 +305,17 @@ namespace OpenJpegDotNet
                             default:
                                 throw new NotSupportedException($"Unsupported number of channels: ${channel}.");
                         }
-
                         break;
                     default:
                         throw new NotSupportedException($"Unsupported pixel depth: ${pixel}.");
                 }
             }
-            catch
-            {
-                if (bitmap != null && bitmapData != null)
-                    bitmap.UnlockBits(bitmapData);
-                bitmap?.Dispose();
-                bitmap = null;
-                bitmapData = null;
-            }
             finally
             {
-                if (planes != IntPtr.Zero)
+                if (planes != IntPtr.Zero) 
+                {
                     NativeMethods.stdlib_free(planes);
-
-                if (bitmap != null && bitmapData != null)
-                    bitmap.UnlockBits(bitmapData);
+                }
             }
 
             return bitmap;

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using SkiaSharp;
 using Xunit;
 
 // ReSharper disable once CheckNamespace
@@ -765,7 +764,8 @@ namespace OpenJpegDotNet.Tests
         {
             const string testImage = "obama-240p.jpg";
             var path = Path.GetFullPath(Path.Combine(TestImageDirectory, testImage));
-            using var bitmap = System.Drawing.Image.FromFile(path) as Bitmap;
+            using var img = SKImage.FromEncodedData(path);
+            using var bitmap = SKBitmap.FromImage(img);
 
             using var compressionParameters = new CompressionParameters();
             OpenJpeg.SetDefaultEncoderParameters(compressionParameters);

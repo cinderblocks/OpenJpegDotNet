@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
+using SkiaSharp;
 
 namespace OpenJpegDotNet.IO
 {
@@ -32,7 +32,7 @@ namespace OpenJpegDotNet.IO
 
         #region Constructors
 
-        public Writer(Bitmap bitmap)
+        public Writer(SKBitmap bitmap)
         {
             _Image = ImageHelper.FromBitmap(bitmap);
             int datalen = (int)(_Image.X1 * _Image.Y1 * _Image.NumberOfComponents + 1024);

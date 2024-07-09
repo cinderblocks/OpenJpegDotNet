@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Drawing;
 using System.Runtime.InteropServices;
+using SkiaSharp;
 
 namespace OpenJpegDotNet.IO
 {
@@ -129,7 +129,7 @@ namespace OpenJpegDotNet.IO
             return this._Image;
         }
 
-        public Bitmap DecodeToBitmap()
+        public SKBitmap DecodeToBitmap()
         {
             if (this._Image == null || this._Image.IsDisposed)
                 throw new InvalidOperationException();

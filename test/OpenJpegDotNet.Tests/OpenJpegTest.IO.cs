@@ -1,6 +1,6 @@
-﻿using System.Drawing;
-using System.IO;
+﻿using System.IO;
 using OpenJpegDotNet.IO;
+using SkiaSharp;
 using Xunit;
 
 namespace OpenJpegDotNet.Tests
@@ -15,7 +15,8 @@ namespace OpenJpegDotNet.Tests
         {
             const string testImage = "obama-240p.jpg";
             var path = Path.GetFullPath(Path.Combine(TestImageDirectory, testImage));
-            using var bitmap = System.Drawing.Image.FromFile(path) as Bitmap;
+            using var img = SKImage.FromEncodedData(path);
+            using var bitmap = SKBitmap.FromImage(img);
 
             using var writer = new Writer(bitmap);
             var output = writer.Encode();
