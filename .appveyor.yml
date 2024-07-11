@@ -1,69 +1,66 @@
 init:
-  - ps: if ($env:APPVEYOR_REPO_TAG -eq "true") { $env:TAG_VERSION = "$env:APPVEYOR_REPO_TAG_NAME.$env:APPVEYOR_BUILD_NUMBER" } else { $env:TAG_VERSION = "v0.1.0.$env:APPVEYOR_BUILD_NUMBER-alpha" }
-  - ps: $env:TAG_VERSION = $env:TAG_VERSION -replace 'v',''
-  - ps: Write-Host "Setting version to '$env:TAG_VERSION'"
-  - ps: Update-AppveyorBuild -Version "$env:TAG_VERSION"
+  - appveyor version
+
+matrix:
+  fast_finish: true
+
+cache:
+  - packages -> **\packages.config
+  - '%LocalAppData%\NuGet\Cache'
 
 environment:
   matrix:
-  - job_name: Windows Build
-    platform: x64
-    appveyor_build_worker_image: Visual Studio 2019
-    configuration: Release
-  - job_name: Linux Build
-    platform: x64
-    appveyor_build_worker_image: Ubuntu
-    configuration: Release
-  - job_name: MacOS Build
-    platform: x64
-    appveyor_build_worker_image: macos-mojave
-    configuration: Release
-
-#matrix:
-#  fast_finish: true
-
-before_build:
-  - git submodule update --init --recursive
-
-# job specific
+      
+    - job_name: Windows
+      platform: x64
+      appveyor_build_worker_image: Visual Studio 2022
+      configuration: Release
+      job_group: Building
+      
+    - job_name: Darwin
+      platform: x64
+      appveyor_build_worker_image: macos-monterey
+      configuration: Release
+      job_group: Building
+      
+    - job_name: Linux
+      platform: x64
+      appveyor_build_worker_image: Ubuntu2204
+      configuration: Release
+      job_group: Building
+      
+    - job_name: Package
+      job_depends_on: Building
+      
+# job-specific configurations
 for:
+
   -
     matrix:
       only:
-        - job_name: Windows Build
-    before_build:
-      - cmd: chcp 65001
-      - cmd: git clean -fxd nuget/
+        - job_name: Windows
+
     build_script:
-      - cmd: cd nuget
-      - cmd: pwsh ./BuildWindows.ps1
-    artifacts:
-      - path: nuget/artifacts
-        name: Nupkgs
-        type: Auto
+      - cmd: echo This is Windows-specific build script
+
   -
     matrix:
       only:
-        - job_name: Linux Build
-    before_build:
-      - cmd: git clean -fxd nuget/
+        - job_name: Darwin
+
     build_script:
-      - cmd: cd nuget
-      - cmd: pwsh ./BuildUbuntu18.ps1
-    artifacts:
-      - path: nuget/artifacts
-        name: Nupkgs
-        type: Auto
-  -
-    matrix:
+      - sh: echo This is Mac-specific build script
+        
+  - matrix:
       only:
-        - job_name: MacOS Build
-    before_build:
-      - cmd: git clean -fxd nuget/
+        - job_name: Linux
+
     build_script:
-      - cmd: cd nuget
-      - cmd: pwsh BuildOSX.ps1
-    artifacts:
-      - path: nuget/artifacts
-        name: Nupkgs
-        type: Auto
+      - sh: echo This is Linux-specific build script
+        
+  - matrix:
+      only:
+        - job_name: Package
+
+    build_script:
+      - sh: echo This is Packaging script
