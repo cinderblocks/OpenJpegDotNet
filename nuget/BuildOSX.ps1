@@ -18,6 +18,7 @@ $BuildSourceHash = [Config]::GetBinaryLibraryOSXHash()
 # osx-x86 does not support
 $BuildTargets = @()
 $BuildTargets += [BuildTarget]::new("desktop", "cpu", 64, "$OperatingSystem-x64", "" )
+$BuildTargets += [BuildTarget]::new("desktop", "cpu", 64, "$OperatingSystem-arm64", "" )
 
 foreach($BuildTarget in $BuildTargets)
 {
