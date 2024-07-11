@@ -25,7 +25,7 @@ environment:
       
     - job_name: Linux
       platform: x64
-      appveyor_build_worker_image: Ubuntu2204
+      appveyor_build_worker_image: Ubuntu2004
       configuration: Release
       job_group: Building
       
@@ -40,27 +40,47 @@ for:
       only:
         - job_name: Windows
 
+    before_build:
+      - cmd: chcp 65001
+      - cmd: git submodule update --init --recursive
+      - pwsh: "Get-ChildItem env:"
     build_script:
-      - cmd: echo This is Windows-specific build script
+      - cmd: cd nuget
+      - cmd: git clean -fxd .
+      - pwsh: .\BuildWindows.ps1  
 
   -
     matrix:
       only:
         - job_name: Darwin
 
+    before_build:
+      - sh: git submodule update --init --recursive
+      - sh: export
     build_script:
-      - sh: echo This is Mac-specific build script
+      - sh: cd nuget
+      - pwsh: ./BuildOSX.ps1
         
   - matrix:
       only:
         - job_name: Linux
 
+    before_build:
+      - sh: git submodule update --init --recursive
+      - sh: export
     build_script:
-      - sh: echo This is Linux-specific build script
+      - sh: cd nuget
+      #- pwsh: ./BuildUbuntu18.ps1
         
   - matrix:
       only:
         - job_name: Package
 
     build_script:
-      - sh: echo This is Packaging script
+      - cmd: echo This is Packaging script
+
+
+artifacts:
+  - path: 'nuget/artifacts/cpu/runtimes/*/native/OpenJpegDotNet*'
+    name: 'Library'
+    type: Auto
