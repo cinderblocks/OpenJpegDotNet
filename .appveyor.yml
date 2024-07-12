@@ -43,7 +43,6 @@ for:
     before_build:
       - cmd: chcp 65001
       - cmd: git submodule update --init --recursive
-      - pwsh: "Get-ChildItem env:"
     build_script:
       - cmd: cd nuget
       - cmd: git clean -fxd .
@@ -56,7 +55,6 @@ for:
 
     before_build:
       - sh: git submodule update --init --recursive
-      - sh: export
     build_script:
       - sh: cd nuget
       - pwsh: ./BuildOSX.ps1
@@ -67,10 +65,9 @@ for:
 
     before_build:
       - sh: git submodule update --init --recursive
-      - sh: export
     build_script:
       - sh: cd nuget
-      #- pwsh: ./BuildUbuntu18.ps1
+      - pwsh: .\BuildUbuntu.ps1
         
   - matrix:
       only:
@@ -81,6 +78,6 @@ for:
 
 
 artifacts:
-  - path: 'nuget/artifacts/cpu/runtimes/*/native/OpenJpegDotNet*'
+  - path: 'nuget/artifacts/*/runtimes/*/native/*OpenJpegDotNet*'
     name: 'Library'
     type: Auto

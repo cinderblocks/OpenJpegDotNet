@@ -1097,7 +1097,7 @@ function ConfigANDROID([Config]$Config)
 
    $arch_type = $Config.GetArchitecture()
    
-   $env:OpenJPEG_DIR = "${installOpenJpegDir}/lib/openjpeg-2.4"
+   $env:OpenJPEG_DIR = "${installOpenJpegDir}/lib/openjpeg-2.5"
    Write-Host "   cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
       -D ANDROID_ABI=$abi `
       -D ANDROID_PLATFORM=android-$level `
@@ -1134,7 +1134,7 @@ function ConfigIOS([Config]$Config)
 
       $OSX_SYSROOT = $Config.GetIOSSDK($osxArchitectures, $developerDir)
 
-      $env:OpenJPEG_DIR = "${installOpenJpegDir}/lib/openjpeg-2.4"
+      $env:OpenJPEG_DIR = "${installOpenJpegDir}/lib/openjpeg-2.5"
 
       # use libc++ rather than libstdc++
       Write-Host "   cmake -D CMAKE_SYSTEM_NAME=iOS `
